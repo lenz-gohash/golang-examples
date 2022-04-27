@@ -5,15 +5,13 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/lenz-gohash/tcp/client"
-	"github.com/lenz-gohash/tcp/server"
+	"github.com/lenz-gohash/golang-examples/simple-tcp/client"
+	"github.com/lenz-gohash/golang-examples/simple-tcp/server"
 )
 
-// Parse the command line arguments
+const serverAddress = ":12345"
 
 func main() {
-	const serverAddress = ":12345"
-
 	argc := len(os.Args)
 	argv := os.Args
 
