@@ -6,21 +6,24 @@ import (
 	"io"
 	"log"
 	"net"
+	"testing"
 )
 
-func Serve(address string) {
+// FIXME
+func TestServe(t *testing.T) {
+
 	// Listen on TCP port 2000 on all available unicast and
 	// anycast IP addresses of the local system.
-	l, err := net.Listen("tcp", address)
+	l, err := net.Listen("tcp", ":12345")
 	if err != nil {
-		log.Fatal(err)
+		t.Fatal(err)
 	}
 	defer l.Close()
 	for {
 		// Wait for a connection.
 		conn, err := l.Accept()
 		if err != nil {
-			log.Fatal(err)
+			t.Fatal(err)
 		}
 
 		log.Printf("Received connection from %s", conn.RemoteAddr())
@@ -28,6 +31,9 @@ func Serve(address string) {
 		// Handle the connection in a new goroutine.
 		// The loop then returns to accepting, so that
 		// multiple connections may be served concurrently.
+
+		// Use a channel to hand off errors
+		errs := make(chan error)
 		go func(c net.Conn) {
 
 			// Make a buffer to hold incoming message
@@ -43,7 +49,9 @@ func Serve(address string) {
 					fmt.Println("Finished reading from client: Received EOF")
 				} else {
 					// Check for other errors
-					log.Fatal("Error reading: ", err.Error())
+
+					// t.Fatal("Error reading: ", err.Error())
+					errs <- err
 				}
 			}
 
@@ -53,5 +61,12 @@ func Serve(address string) {
 			// Shut down the connection.
 			c.Close()
 		}(conn)
+
+		// Check for errors
+		err = <-errs
+		if err != nil {
+			t.Fatal("Error reading: ", err.Error())
+		}
 	}
+
 }
