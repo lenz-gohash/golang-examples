@@ -1,3 +1,4 @@
+// A tcp server that listens on a specified address and port.
 package server
 
 import (
@@ -8,8 +9,9 @@ import (
 	"net"
 )
 
+// Start a server that listens on the specified address and port.
 func Serve(address string) {
-	// Listen on TCP port 2000 on all available unicast and
+	// Listen on TCP `port` on all available unicast and
 	// anycast IP addresses of the local system.
 	l, err := net.Listen("tcp", address)
 	if err != nil {

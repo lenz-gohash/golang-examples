@@ -35,8 +35,7 @@ func TestServe(t *testing.T) {
 }
 
 func ExampleServe() {
-	const address = "localhost"
-	const port = "12345"
+	const address = ":12345" // all interfaces on port 12345
 
-	Serve(address + ":" + port)
+	Serve(address)
 }
