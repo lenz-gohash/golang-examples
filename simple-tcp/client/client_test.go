@@ -14,6 +14,10 @@ func TestDial(t *testing.T) {
 	var address = "localhost:12345"
 	var message = "Hello, World!"
 
+	// Start the listening in a goroutine. This allows for a non-blocking call
+	// net.Listen.
+	go net.Listen("tcp", address)
+
 	var d net.Dialer
 	ctx, cancel := context.WithTimeout(context.Background(), time.Minute)
 	defer cancel()
@@ -28,4 +32,11 @@ func TestDial(t *testing.T) {
 		log.Fatal(err)
 	}
 
+}
+
+func ExampleDial() {
+	const address = "localhost:12345"
+
+	// Connect to the server and send "Hello, World!"
+	Dial(address, "Hello, World!")
 }

@@ -1,3 +1,4 @@
+// A TCP client that connects to the server at `address` and sends `message`.
 package client
 
 import (
