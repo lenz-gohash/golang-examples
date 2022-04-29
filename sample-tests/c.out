@@ -1,5 +1,0 @@
-mode: set
-github.com/lenz-gohash/golang-examples/sample_tests/arithmetic/addition.go:3.24,5.2 1 1
-github.com/lenz-gohash/golang-examples/sample_tests/manipulate/split.go:7.36,10.13 3 1
-github.com/lenz-gohash/golang-examples/sample_tests/manipulate/split.go:15.2,15.26 1 1
-github.com/lenz-gohash/golang-examples/sample_tests/manipulate/split.go:10.13,14.3 3 1
