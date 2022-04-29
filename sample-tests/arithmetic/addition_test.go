@@ -14,7 +14,7 @@ func TestAdd(t *testing.T) {
 
 	for name, tc := range tests {
 		t.Run(name, func(t *testing.T) {
-			got := add(tc.x, tc.y)
+			got := Add(tc.x, tc.y)
 			if tc.want != got {
 				t.Fatalf("expected: %d, got: %d", tc.want, got)
 			}

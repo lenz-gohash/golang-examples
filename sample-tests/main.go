@@ -5,20 +5,15 @@ package main
 import (
 	"fmt"
 
-	"github.com/google/go-cmp/cmp"
+	"github.com/lenz-gohash/golang-examples/sample-tests/arithmetic"
+	"github.com/lenz-gohash/golang-examples/sample-tests/manipulate"
 )
 
-// func main() {
-// 	result := manipulate.Split("a,b,c", ",")
-// 	fmt.Println(result)
-// }
-
 func main() {
-	type T struct {
-		I int
-	}
-	x := []*T{{1}, {2}, {3}, {4}}
-	y := []*T{{1}, {2}, {4}, {5}}
-	diff := cmp.Diff(x, y)
-	fmt.Printf(diff)
+	splitResult := manipulate.Split("a,b,c", ",")
+	fmt.Println("manipulate.Split(\"a,b,c\", \",\") =", splitResult)
+
+	addResult := arithmetic.Add(7, -8)
+	fmt.Println("arithmetic.Add(7, -8) =", addResult)
+
 }

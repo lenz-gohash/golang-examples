@@ -1,4 +1,4 @@
-module github.com/lenz-gohash/golang-examples/sample_tests
+module github.com/lenz-gohash/golang-examples/sample-tests
 
 go 1.18
 
