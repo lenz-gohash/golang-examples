@@ -21,9 +21,17 @@ func main() {
 		Name:        "John",
 		Age:         35,
 		WeightInLbs: 250,
-		HeightInCm:  191,
+		HeightInCm:  200,
 	}
 
-	fmt.Println("person.BMI =", person.Bmi())
+	giant := people.Giant{
+		NameInAncientGreek: "Γιάννης",
+		WeightInTons:       1.5,
+		HeightInKms:        12.5,
+		AgeInCenturies:     11,
+	}
+
+	fmt.Println("person.BMI =", people.Bmi(&person))
+	fmt.Println("giant.BMI =", people.Bmi(&giant))
 
 }
