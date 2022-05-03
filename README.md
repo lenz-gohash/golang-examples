@@ -9,6 +9,7 @@ A collection of Go sample module examples.
 #### Modules
 - [sample-tests](sample-tests/): example of Go unit tests 
 - [simple-tcp](simple-tcp/): simple TCP server and client.
+- [simple-api](simple-api/): simple REST API with authentication.
 
 #### Project information
 - [Maintainers](#maintainers)
