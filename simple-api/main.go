@@ -34,5 +34,13 @@ func main() {
 		})
 	})
 
+	// Post route
+	// TODO: Print message to the console and echo it back to the client
+	r.POST("/receiver", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Accessed POST endpoint",
+		})
+	})
+
 	r.Run() // listen and serve on localhost:8080
 }
