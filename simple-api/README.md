@@ -18,7 +18,6 @@ A simple restful api example with a username and password authentication
 Run the server 
 ```
 go run main.go
-
 ```
 
 Access the unprotected endpoint 
