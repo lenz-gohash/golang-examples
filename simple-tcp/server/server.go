@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net"
 )
@@ -32,11 +33,8 @@ func Serve(address string) {
 		// multiple connections may be served concurrently.
 		go func(c net.Conn) {
 
-			// Make a buffer to hold incoming message
-			buffer := make([]byte, 1024)
-
-			// Read the incoming connection into the buffer.
-			bytes, err := c.Read(buffer) // read the message
+			// Read the entire incoming message into the buffer.
+			bytes, err := ioutil.ReadAll(c)
 
 			// Check for errors
 			if err != nil {
@@ -50,7 +48,7 @@ func Serve(address string) {
 			}
 
 			// Log the received message and size
-			log.Printf("Received %d bytes: %s", bytes, string(buffer[:bytes]))
+			log.Printf("Received %d bytes: %s", len(bytes), string(bytes[:]))
 
 			// Shut down the connection.
 			c.Close()
