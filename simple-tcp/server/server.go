@@ -2,9 +2,11 @@
 package server
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net"
 )
@@ -30,30 +32,65 @@ func Serve(address string) {
 		// Handle the connection in a new goroutine.
 		// The loop then returns to accepting, so that
 		// multiple connections may be served concurrently.
-		go func(c net.Conn) {
 
-			// Make a buffer to hold incoming message
-			buffer := make([]byte, 1024)
+		go readEntireMessage(conn)
+		// go readMessageLineByLine(conn)
+	}
+}
 
-			// Read the incoming connection into the buffer.
-			bytes, err := c.Read(buffer) // read the message
+// Read the entire message from the connection until EOF or error.
+func readEntireMessage(c net.Conn) {
 
-			// Check for errors
-			if err != nil {
-				if errors.Is(err, io.EOF) { // prefered way by GoLang doc
-					// Check for EOF
-					fmt.Println("Finished reading from client: Received EOF")
-				} else {
-					// Check for other errors
-					log.Fatal("Error reading: ", err.Error())
-				}
+	// Read the entire incoming message into the buffer.
+	bytes, err := ioutil.ReadAll(c)
+
+	// Check for errors
+	if err != nil {
+		if errors.Is(err, io.EOF) { // prefered way by GoLang doc
+			// Check for EOF
+			fmt.Println("Finished reading from client: Received EOF")
+		} else {
+			// Check for other errors
+			log.Fatal("Error reading: ", err.Error())
+		}
+	}
+
+	// Log the received message and size
+	log.Printf("Received %d bytes: %s", len(bytes), string(bytes[:]))
+
+	// Shut down the connection.
+	c.Close()
+}
+
+// Read the message line by line from the connection, separated by `\n`, until EOF or error.
+func readMessageLineByLine(c net.Conn) {
+
+	for {
+
+		// Read string until newline.
+		line, err := bufio.NewReader(c).ReadString('\n')
+
+		// Check for errors
+		if err != nil {
+			if errors.Is(err, io.EOF) { // prefered way by GoLang doc
+				// Received EOF
+				fmt.Println("Connection closed cleanly by peer")
+
+			} else {
+				// Check for other errors
+				log.Fatal("Error reading: ", err.Error())
 			}
-
-			// Log the received message and size
-			log.Printf("Received %d bytes: %s", bytes, string(buffer[:bytes]))
 
 			// Shut down the connection.
 			c.Close()
-		}(conn)
+
+			// Received Error or EOF
+			break
+		}
+
+		// Log the received message and size
+		// log.Printf("Received %d bytes: %s", len(bytes), string(bytes[:]))
+		log.Printf("Received %d bytes: %s", len(line), line)
 	}
+
 }
