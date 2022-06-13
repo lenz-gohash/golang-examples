@@ -2,6 +2,7 @@
 package server
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"io"
@@ -32,28 +33,34 @@ func Serve(address string) {
 		// multiple connections may be served concurrently.
 		go func(c net.Conn) {
 
-			// Make a buffer to hold incoming message
-			buffer := make([]byte, 1024)
+			for {
 
-			// Read the incoming connection into the buffer.
-			bytes, err := c.Read(buffer) // read the message
+				// Read string until newline.
+				line, err := bufio.NewReader(c).ReadString('\n')
 
-			// Check for errors
-			if err != nil {
-				if errors.Is(err, io.EOF) { // prefered way by GoLang doc
-					// Check for EOF
-					fmt.Println("Finished reading from client: Received EOF")
-				} else {
-					// Check for other errors
-					log.Fatal("Error reading: ", err.Error())
+				// Check for errors
+				if err != nil {
+					if errors.Is(err, io.EOF) { // prefered way by GoLang doc
+						// Received EOF
+						fmt.Println("Connection closed cleanly by peer")
+
+					} else {
+						// Check for other errors
+						log.Fatal("Error reading: ", err.Error())
+					}
+
+					// Shut down the connection.
+					c.Close()
+
+					// Received Error or EOF
+					break
 				}
+
+				// Log the received message and size
+				// log.Printf("Received %d bytes: %s", len(bytes), string(bytes[:]))
+				log.Printf("Received %d bytes: %s", len(line), line)
 			}
 
-			// Log the received message and size
-			log.Printf("Received %d bytes: %s", bytes, string(buffer[:bytes]))
-
-			// Shut down the connection.
-			c.Close()
 		}(conn)
 	}
 }
